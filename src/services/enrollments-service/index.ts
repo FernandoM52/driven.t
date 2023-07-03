@@ -9,7 +9,7 @@ import httpStatus from 'http-status';
 
 async function getAddressFromCEP(cep: string) {
   const result = await request.get(`${process.env.VIA_CEP_API}/${cep}/json/`);
-  
+
   if (!result.data || result.data.erro === true || result.status === httpStatus.BAD_REQUEST) {
     throw notFoundError();
   }
@@ -20,7 +20,7 @@ async function getAddressFromCEP(cep: string) {
     bairro: result.data.bairro,
     cidade: result.data.localidade,
     uf: result.data.uf,
-  }
+  };
   return resultReturn;
 }
 
