@@ -9,8 +9,7 @@ import httpStatus from 'http-status';
 
 async function getAddressFromCEP(cep: string) {
   const result = await request.get(`${process.env.VIA_CEP_API}/${cep}/json/`);
-  console.log(result)
-
+  
   if (!result.data || result.data.erro === true || result.status === httpStatus.BAD_REQUEST) {
     throw notFoundError();
   }
@@ -19,7 +18,7 @@ async function getAddressFromCEP(cep: string) {
     logradouro: result.data.logradouro,
     complemento: result.data.complemento,
     bairro: result.data.bairro,
-    localidade: result.data.localidade,
+    cidade: result.data.localidade,
     uf: result.data.uf,
   }
   return resultReturn;
@@ -54,6 +53,7 @@ async function createOrUpdateEnrollmentWithAddress(params: CreateOrUpdateEnrollm
   const address = getAddressForUpsert(params.address);
 
   // TODO - Verificar se o CEP é válido antes de associar ao enrollment.
+  await getAddressFromCEP(address.cep);
 
   const newEnrollment = await enrollmentRepository.upsert(params.userId, enrollment, exclude(enrollment, 'userId'));
 
