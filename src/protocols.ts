@@ -44,3 +44,7 @@ export type RequestError = {
   name: string;
   message: string;
 };
+
+export type TicketTypeId = {
+  ticketTypeId: number
+}

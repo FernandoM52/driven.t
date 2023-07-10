@@ -1,37 +1,36 @@
 import ticketsRepository from "@/repositories/tickets-repository";
+import enrollmentsService from "../enrollments-service";
 
 async function getTicketTypes() {
   const result = await ticketsRepository.getTicketTypes();
   return result;
 }
 
-async function getAllTickets() {
-  const result = await ticketsRepository.getAllTickets();
+async function getUserTicket(userId: number) {
+  const userEnrollment = await enrollmentsService.getUserEnrollment(userId);
+  const result = await ticketsRepository.getUserTicket(userEnrollment.id);
+
+  if (!result) {
+    throw {
+      name: "NotFoundError",
+      message: "Enrollment not found"
+    }
+  }
+
   return result;
 }
+
+async function createTicket(ticketTypeId: number, userId: number) {
+  const userEnrollment = await enrollmentsService.getUserEnrollment(userId);
+  await ticketsRepository.createTicket(ticketTypeId, userEnrollment.id);
+
+  return getUserTicket(userId);
+}
+
 const ticketsService = {
   getTicketTypes,
-  getAllTickets
+  getUserTicket,
+  createTicket
 };
 
 export default ticketsService;
-
-// async function getAddressFromCEP(cep: string): Promise<AddressEnrollment> {
-//   const result = await request.get(`${process.env.VIA_CEP_API}/${cep}/json/`);
-
-//   if (!result.data || result.data.erro) {
-//     throw notFoundError();
-//   }
-
-//   const { bairro, localidade, uf, complemento, logradouro } = result.data;
-
-//   const address: AddressEnrollment = {
-//     bairro,
-//     cidade: localidade,
-//     uf,
-//     complemento,
-//     logradouro,
-//   };
-
-//   return address;
-// }

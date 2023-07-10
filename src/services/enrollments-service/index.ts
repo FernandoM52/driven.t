@@ -26,6 +26,18 @@ async function getAddressFromCEP(cep: string): Promise<AddressEnrollment> {
   return address;
 }
 
+async function getUserEnrollment(userId: number) {
+  const userEnrollment = await enrollmentRepository.getUserEnrollment(userId);
+  if (!userEnrollment) {
+    throw {
+      name: 'NotFoundError',
+      message: 'Enrollment not found',
+    };
+  }
+
+  return userEnrollment;
+}
+
 async function getOneWithAddressByUserId(userId: number): Promise<GetOneWithAddressByUserIdResult> {
   const enrollmentWithAddress = await enrollmentRepository.findWithAddressByUserId(userId);
 
@@ -76,6 +88,7 @@ const enrollmentsService = {
   getOneWithAddressByUserId,
   createOrUpdateEnrollmentWithAddress,
   getAddressFromCEP,
+  getUserEnrollment
 };
 
 export default enrollmentsService;

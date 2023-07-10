@@ -1,8 +1,23 @@
+import { AuthenticatedRequest } from '@/middlewares';
+import { TicketTypeId } from '@/protocols';
 import ticketsService from '@/services/tickets-service';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import httpStatus from 'http-status';
 
-export async function getTicketTypes(req: Request, res: Response) {
+export async function createTicket(req: AuthenticatedRequest, res: Response) {
+  const { ticketTypeId } = req.body as TicketTypeId;
+  const { userId } = req;
+
+  try {
+    const ticket = await ticketsService.createTicket(ticketTypeId, userId);
+    res.status(httpStatus.CREATED).send(ticket);
+  } catch (error) {
+    if (error.name === 'NotFoundError') return res.sendStatus(httpStatus.NOT_FOUND);
+    return res.status(httpStatus.BAD_REQUEST).send(error);
+  }
+}
+
+export async function getTicketTypes(req: AuthenticatedRequest, res: Response) {
   try {
     const ticketTypes = await ticketsService.getTicketTypes();
     res.send(ticketTypes);
@@ -11,24 +26,14 @@ export async function getTicketTypes(req: Request, res: Response) {
   }
 }
 
-export async function getAllTickets(req: Request, res: Response) {
+export async function getUserTicket(req: AuthenticatedRequest, res: Response) {
+  const { userId } = req;
+
   try {
-    const ticketTypes = await ticketsService.getAllTickets();
-    res.send(ticketTypes);
+    const ticket = await ticketsService.getUserTicket(userId);
+    res.send(ticket);
   } catch (error) {
+    if (error.name === 'NotFoundError') return res.sendStatus(httpStatus.NOT_FOUND);
     return res.status(httpStatus.BAD_REQUEST).send(error);
   }
 }
-
-// export async function getAddressFromCEP(req: AuthenticatedRequest, res: Response) {
-//   const { cep } = req.query as Record<string, string>;
-
-//   try {
-//     const address = await enrollmentsService.getAddressFromCEP(cep);
-//     res.status(httpStatus.OK).send(address);
-//   } catch (error) {
-//     if (error.name === 'NotFoundError') {
-//       return res.send(httpStatus.NO_CONTENT);
-//     }
-//   }
-// }
