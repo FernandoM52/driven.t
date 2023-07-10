@@ -5,8 +5,13 @@ async function getTicketTypes() {
   return result;
 }
 
+async function getAllTickets() {
+  const result = await ticketsRepository.getAllTickets();
+  return result;
+}
 const ticketsService = {
-  getTicketTypes
+  getTicketTypes,
+  getAllTickets
 };
 
 export default ticketsService;

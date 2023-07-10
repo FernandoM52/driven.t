@@ -11,6 +11,15 @@ export async function getTicketTypes(req: Request, res: Response) {
   }
 }
 
+export async function getAllTickets(req: Request, res: Response) {
+  try {
+    const ticketTypes = await ticketsService.getAllTickets();
+    res.send(ticketTypes);
+  } catch (error) {
+    return res.status(httpStatus.BAD_REQUEST).send(error);
+  }
+}
+
 // export async function getAddressFromCEP(req: AuthenticatedRequest, res: Response) {
 //   const { cep } = req.query as Record<string, string>;
 

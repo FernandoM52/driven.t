@@ -5,8 +5,12 @@ async function getTicketTypes() {
   return prisma.ticketType.findMany();
 }
 
+async function getAllTickets() {
+  return prisma.ticketType.findMany();
+}
 const ticketsRepository = {
-  getTicketTypes
+  getTicketTypes,
+  getAllTickets
 };
 
 export default ticketsRepository;
@@ -19,3 +23,4 @@ export default ticketsRepository;
 //     },
 //   });
 // }
+
