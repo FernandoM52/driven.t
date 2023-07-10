@@ -27,10 +27,28 @@ async function createTicket(ticketTypeId: number, userId: number) {
   return getUserTicket(userId);
 }
 
+async function getTicketById(ticketId: number) {
+  const ticket = await ticketsRepository.getTicketById(ticketId);
+  if (!ticket) {
+    throw {
+      name: "NotFoundError",
+      message: "Enrollment not found"
+    }
+  }
+
+  return ticket;
+}
+
+async function getTicketsTypeById(id: number) {
+  return await ticketsRepository.getTicketTypeById(id);
+}
+
 const ticketsService = {
   getTicketTypes,
   getUserTicket,
-  createTicket
+  createTicket,
+  getTicketById,
+  getTicketsTypeById
 };
 
 export default ticketsService;

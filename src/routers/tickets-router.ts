@@ -10,4 +10,4 @@ ticketsRouter.post("/", createTicket);
 ticketsRouter.get("/types", getTicketTypes)
 ticketsRouter.get("/", getUserTicket)
 
-export default ticketsRouter;
+export { ticketsRouter };
