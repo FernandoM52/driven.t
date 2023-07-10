@@ -4,7 +4,9 @@ import { Router } from "express";
 
 const ticketsRouter = Router();
 
-ticketsRouter.use(authenticateToken)
+ticketsRouter.use(authenticateToken);
+
+ticketsRouter
   .get("/types", getTicketTypes)
   .get("/", getAllTickets)
 
