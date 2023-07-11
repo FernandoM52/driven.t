@@ -3,9 +3,7 @@ import { CardData } from "@/protocols";
 
 async function getPaymentByTicket(ticketId: number) {
   return await prisma.payment.findFirst({
-    where: {
-      ticketId,
-    },
+    where: { ticketId }
   });
 }
 
@@ -21,7 +19,7 @@ async function createPayment(card: CardData, ticketId: number, value: number) {
       value,
       createdAt: new Date(Date.now()),
       ticketId,
-    },
+    }
   });
 }
 
